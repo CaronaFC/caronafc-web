@@ -9,7 +9,9 @@ export default function Hero() {
     <section className="relative py-32 md:py-40 overflow-hidden rounded-xl m-1">
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110 blur-xs"
-        style={{ backgroundImage: "url('/assets/videos/hero.gif')" }}
+       style={{
+          backgroundImage: `url('${import.meta.env.BASE_URL}assets/videos/hero.gif')`,
+        }}
       ></div>
 
       <div className="absolute inset-0 bg-[#0b0b0b98] w-full h-full"></div>

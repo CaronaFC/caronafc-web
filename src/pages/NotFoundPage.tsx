@@ -4,7 +4,7 @@ export default function NotFoundPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-black to-gray-900">
       <img
-        src="/assets/images/logo2.png"
+        src={new URL('/assets/images/logo2.png', import.meta.url).href}
         alt="CaronaFC Logo"
         className="w-32 h-32 rounded-xl mb-4"
       />

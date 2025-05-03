@@ -61,7 +61,7 @@ export default function Championships() {
             className="w-full md:w-1/2 overflow-hidden rounded-3xl shadow-2xl"
           >
             <img
-              src="/assets/images/brasileirao.webp"
+              src={new URL('/assets/images/brasileirao.webp', import.meta.url).href}
               alt="Campeonato Brasileiro"
               className="w-full h-auto object-cover"
             />
