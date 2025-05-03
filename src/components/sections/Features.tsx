@@ -29,7 +29,9 @@ export default function Features() {
     <section
       id="features"
       className="relative py-20 bg-gradient-to-br from-blue-950 to-secondary-dark overflow-hidden rounded-xl m-1 bg-cover bg-center"
-      style={{ backgroundImage: "url('/assets/videos/city.gif')" }}
+      style={{
+        backgroundImage: `url('${import.meta.env.BASE_URL}assets/videos/city.gif')`,
+      }}
     >
       <div className="absolute top-0 left-0 w-[20rem] h-[20rem] bg-orange-500 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 z-0" />
 

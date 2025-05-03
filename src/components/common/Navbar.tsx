@@ -29,7 +29,7 @@ export default function Navbar() {
           className="flex items-center text-neutral-50 font-bold text-xl space-x-2 cursor-pointer"
         >
           <img
-            src="/assets/images/logo2.png"
+            src={new URL("/assets/images/logo.png", import.meta.url).href}
             alt="CaronaFC Logo"
             className="w-14 h-14 rounded-xl"
           />

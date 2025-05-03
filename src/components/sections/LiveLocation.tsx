@@ -20,7 +20,7 @@ export default function LiveLocation() {
             className="w-full md:w-1/2 overflow-hidden rounded-3xl shadow-2xl"
           >
             <video
-              src="/assets/videos/gps.mp4"
+              src={new URL('/assets/videos/gps.mp4', import.meta.url).href}
               autoPlay
               loop
               muted

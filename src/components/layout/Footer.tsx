@@ -20,7 +20,7 @@ export default function Footer() {
 
         <div className="flex items-center gap-2">
           <img
-            src="/assets/images/brasil-flag.png"
+            src={new URL('/assets/images/brasil-flag.png', import.meta.url).href}
             alt="Brasil"
             className="w-6 h-6"
           />

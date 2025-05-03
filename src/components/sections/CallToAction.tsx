@@ -7,7 +7,9 @@ export default function CallToAction() {
     <section className="relative py-32 md:py-40 overflow-hidden rounded-xl m-1">
       <div
         className="absolute inset-0 bg-cover bg-center scale-110 blur-xs"
-        style={{ backgroundImage: "url('/assets/images/crowd.jpg')" }}
+        style={{
+          backgroundImage: `url('${import.meta.env.BASE_URL}assets/images/crowd.jpg')`,
+        }}
       ></div>
 
       <div className="absolute inset-0 bg-black/80 w-full h-full z-0"></div>
