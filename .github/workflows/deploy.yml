@@ -1,0 +1,52 @@
+name: gh-pages deploy ~CaronaFC
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: setup node.js 📦
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: install dependencies 🔧
+        run: npm install
+
+      - name: build project 🏗️
+        run: |
+          npm run build
+          cp ./dist/index.html ./dist/404.html
+
+      - name: setup GitHub Pages 📄
+        uses: actions/configure-pages@v3
+
+      - name: upload artifact 📦
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './dist'
+
+      - name: deploy to GitHub Pages 🚀
+        id: deployment
+        uses: actions/deploy-pages@v2
