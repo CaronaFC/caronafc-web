@@ -1,8 +1,11 @@
 import AppRoutes from "./routes/Routes"
+import { AuthProvider } from "./services/auth"
 
 function App() {
   return (
-    <AppRoutes />
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   )
 }
 
