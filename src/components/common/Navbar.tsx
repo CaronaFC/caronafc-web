@@ -1,10 +1,20 @@
 import { useState } from "react";
-import { Menu, X, Download } from "lucide-react";
+import {
+  Menu,
+  X,
+  Download,
+  User,
+  LayoutDashboard,
+} from "lucide-react";
+import { useAuth } from "../../services/auth";
+import { useNavigate } from "react-router-dom";
 
 import Button from "./Button";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -13,13 +23,17 @@ export default function Navbar() {
       top: 0,
       behavior: "smooth",
     });
-  }
+  };
 
   const menuItems = [
     { label: "Jogos", href: "#championships" },
     { label: "Benefícios", href: "#features" },
     { label: "Fluxo", href: "#how-it-works" },
   ];
+
+  const handleIconClick = () => {
+    navigate(isAuthenticated ? "/dashboard" : "/login");
+  };
 
   return (
     <nav className="bg-gradient-to-t from-black to-gray-900 fixed top-0 left-0 w-full pt-6 pb-4 z-50">
@@ -38,15 +52,11 @@ export default function Navbar() {
 
         <div className="md:hidden">
           <Button onClick={toggleMenu} className="text-neutral-50">
-            {isMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </Button>
         </div>
 
-        <div className={`hidden md:flex space-x-6`}>
+        <div className="hidden md:flex items-center space-x-6">
           {menuItems.map((item) => (
             <a
               key={item.label}
@@ -56,12 +66,24 @@ export default function Navbar() {
               {item.label}
             </a>
           ))}
-        </div>
 
-        <Button className="hidden md:block bg-secondary text-white py-2 px-6 rounded-full hover:bg-orange-400 transition duration-300 font-bold">
-          Baixar
-          <Download className="ml-2 inline-flex" />
-        </Button>
+          <Button className="bg-secondary text-white py-2 px-6 rounded-full hover:bg-orange-400 transition duration-300 font-bold flex items-center gap-2">
+            Baixar
+            <Download className="ml-2 inline-flex" />
+          </Button>
+
+          <button
+            onClick={handleIconClick}
+            aria-label={isAuthenticated ? "Dashboard" : "Login"}
+            className="text-neutral-50 hover:text-orange-400 transition duration-300"
+          >
+            {isAuthenticated ? (
+              <LayoutDashboard className="w-6 h-6" />
+            ) : (
+              <User className="w-6 h-6" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -84,6 +106,17 @@ export default function Navbar() {
             <span>Baixar</span>
             <Download className="ml-2 inline" />
           </Button>
+          <button
+            onClick={handleIconClick}
+            aria-label={isAuthenticated ? "Dashboard" : "Login"}
+            className="text-neutral-50 hover:text-orange-400 transition duration-300 mt-4"
+          >
+            {isAuthenticated ? (
+              <LayoutDashboard className="w-6 h-6" />
+            ) : (
+              <User className="w-6 h-6" />
+            )}
+          </button>
         </div>
       </div>
     </nav>
