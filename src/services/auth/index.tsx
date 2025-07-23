@@ -1,11 +1,23 @@
 import api from "../api";
 import axios from "axios";
-
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+
+type UsuarioType = {
+  id: number;
+  nome_completo: string;
+  email: string;
+  numero: string;
+  cpf: string;
+  senha: string;
+  imagem: string | null;
+  data_nascimento: string | null;
+  data_criacao: string;
+};
 
 type AuthContextType = {
   isAuthenticated: boolean;
   token: string | null;
+  usuario: UsuarioType | null;
   loading: boolean;
   error: string | null;
   login: (identificador: string, senha: string) => Promise<void>;
@@ -18,6 +30,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => {
     return localStorage.getItem("token");
   });
+
+  const [usuario, setUsuario] = useState<UsuarioType | null>(() => {
+    const savedUser = localStorage.getItem("usuario");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("token"));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,27 +50,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (usuario) {
+      localStorage.setItem("usuario", JSON.stringify(usuario));
+    } else {
+      localStorage.removeItem("usuario");
+    }
+  }, [usuario]);
+
   async function login(identificador: string, senha: string): Promise<void> {
     setLoading(true);
     setError(null);
 
     try {
       const res = await api.post("auth/login", { identificador, senha });
-      const { token } = res.data;
+      const { token, usuario } = res.data;
 
-      if (token) {
+      if (token && usuario) {
         setToken(token);
+        setUsuario(usuario);
         setIsAuthenticated(true);
       } else {
-        throw new Error;
+        throw new Error("Resposta inválida do servidor.");
       }
     } catch (error) {
       setIsAuthenticated(false);
       setToken(null);
+      setUsuario(null);
 
       if (axios.isAxiosError(error)) {
-        if (error.status && error.status === 401) {
+        if (error.response?.status === 401) {
           setError("Credenciais inválidas. Por favor, tente novamente.");
+        } else {
+          setError("Erro ao conectar ao servidor, tente novamente.");
         }
       } else {
         setError("Erro inesperado do servidor, tente novamente.");
@@ -66,14 +96,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function logout() {
     setToken(null);
+    setUsuario(null);
     setIsAuthenticated(false);
     localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
     delete api.defaults.headers.common["Authorization"];
   }
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, token, loading, error, login, logout }}
+      value={{ isAuthenticated, token, usuario, loading, error, login, logout }}
     >
       {children}
     </AuthContext.Provider>
